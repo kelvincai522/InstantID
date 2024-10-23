@@ -42,7 +42,7 @@ mimetypes.add_type("image/webp", ".webp")
 
 # GPU global variables
 DEVICE = get_torch_device()
-DTYPE = torch.float16 if str(DEVICE).__contains__("cuda") else torch.float32
+DTYPE = torch.bfloat16 if str(DEVICE).__contains__("cuda") else torch.float32
 
 # for `ip-adapter`, `ControlNetModel`, and `stable-diffusion-xl-base-1.0`
 CHECKPOINTS_CACHE = "./checkpoints"
@@ -58,6 +58,11 @@ FEATURE_EXTRACTOR = "./feature-extractor"
 SAFETY_URL = "https://weights.replicate.delivery/default/playgroundai/safety-cache.tar"
 
 SDXL_NAME_TO_PATHLIKE = {
+    "tPonynai3_v65": {
+        "url": "https://huggingface.co/v2ray/civitai-collection/resolve/main/models/tPonynai3_v65.safetensors",
+        "path": "checkpoints/",
+        "file": "tPonynai3_v65.safetensors"
+    },
     # These are all huggingface models that we host via gcp + pget
     "stable-diffusion-xl-base-1.0": {
         "slug": "stabilityai/stable-diffusion-xl-base-1.0",
@@ -530,6 +535,7 @@ class Predictor(BasePredictor):
             description="Pick which base weights you want to use",
             default="stable-diffusion-xl-base-1.0",
             choices=[
+                "tPonynai3_v65",
                 "stable-diffusion-xl-base-1.0",
                 "juggernaut-xl-v8",
                 "afrodite-xl-v2",
